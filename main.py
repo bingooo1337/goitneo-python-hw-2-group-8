@@ -10,6 +10,10 @@ def input_error(func):
             return func(*args, **kwargs)
         except ValueError:
             return "Give me name and phone please."
+        except KeyError:
+            return "No such contact."
+        except IndexError:
+            return "Give me name please."
 
     return inner
 
@@ -21,21 +25,20 @@ def add_contact(args, contacts):
     return "Contact added."
 
 
+@input_error
 def change_contact(args, contacts):
     name, phone = args
     contacts[name] = phone
     return "Contact updated."
 
 
+@input_error
 def show_phone(args, contacts):
     name = args[0]
-    phone = contacts.get(name, None)
-    if (phone == None):
-        return "No such contact."
-    else:
-        return phone
+    return contacts[name]
 
 
+@input_error
 def show_all(contacts):
     if (len(contacts) == 0):
         return "No contacts."
